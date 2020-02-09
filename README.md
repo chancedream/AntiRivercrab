@@ -1,5 +1,5 @@
 # AntiRivercrab
-
+![GitHub](https://img.shields.io/github/license/xxzl0130/AntiRivercrab) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/xxzl0130/AntiRivercrab) ![GitHub All Releases](https://img.shields.io/github/downloads/xxzl0130/AntiRivercrab/total)  
 少女前线反和谐工具。
 
 ## 使用方法
