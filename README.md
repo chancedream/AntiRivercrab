@@ -13,3 +13,7 @@
 [GFHelper](https://github.com/ihciah/GFHelper)
 
 [discord-lite](https://github.com/cnnblike/discord-lite)
+
+## 打赏
+微信扫码支持一下~  
+![微信打赏](https://raw.githubusercontent.com/xxzl0130/CodeX/master/CodeX/Resources/pay.png)
