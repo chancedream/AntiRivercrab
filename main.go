@@ -74,7 +74,11 @@ func (ar *AntiRivercrab) onResponse(resp *http.Response, ctx *goproxy.ProxyCtx) 
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		return resp
 	}
-	if strings.HasSuffix(ctx.Req.URL.Path,"/Index/getDigitalSkyNbUid"){
+	if body[0] != byte(35){
+		resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		return resp
+	}
+	if strings.HasSuffix(ctx.Req.URL.Path,"/Index/getDigitalSkyNbUid") || strings.HasSuffix(ctx.Req.URL.Path,"/Index/getUidEnMicaQueue"){
 		data, err := cipher.AuthCodeDecodeB64Default(string(body)[1:])
 		if err != nil {
 			ar.log.Errorf("解析Uid数据失败 -> %+v", err)
@@ -114,8 +118,8 @@ func (ar *AntiRivercrab) onResponse(resp *http.Response, ctx *goproxy.ProxyCtx) 
 func (ar *AntiRivercrab) condition() goproxy.ReqConditionFunc {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
 		ar.log.Infof("请求 -> %s", path(req))
-		if strings.HasSuffix(req.Host, "ppgame.com") {
-			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid"){
+		if strings.HasSuffix(req.Host, "ppgame.com") || strings.HasSuffix(req.Host, "sunborngame.com"){
+			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid") || strings.HasSuffix(req.URL.Path,"/Index/getUidEnMicaQueue"){
 				ar.log.Infof("请求通过 -> %s", path(req))
 				return true
 			}
