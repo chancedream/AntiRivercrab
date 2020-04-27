@@ -118,8 +118,8 @@ func (ar *AntiRivercrab) onResponse(resp *http.Response, ctx *goproxy.ProxyCtx) 
 func (ar *AntiRivercrab) condition() goproxy.ReqConditionFunc {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
 		ar.log.Infof("请求 -> %s", path(req))
-		if strings.HasSuffix(req.Host, "ppgame.com") || strings.HasSuffix(req.Host, "sunborngame.com"){
-			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid") || strings.HasSuffix(req.URL.Path,"/Index/getUidEnMicaQueue"){
+		if strings.HasSuffix(req.Host, "ppgame.com") || strings.HasSuffix(req.Host, "txwy.tw")  || strings.HasSuffix(req.Host, "girlfrontline.co.kr") || strings.HasSuffix(req.Host, "sunborngame.com"){
+			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid") || strings.HasSuffix(req.URL.Path, "/Index/getUidTianxiaQueue") || strings.HasSuffix(req.URL.Path,"/Index/getUidEnMicaQueue"){
 				ar.log.Infof("请求通过 -> %s", path(req))
 				return true
 			}
