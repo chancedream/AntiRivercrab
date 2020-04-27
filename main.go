@@ -46,8 +46,8 @@ func main() {
 		sign : make(map[string]SignInfo) ,
 		pattern : "\"naive_build_gun_formula\":\"(\\d+:\\d+:\\d+:\\d+)?\"",
 		replacement : "\"naive_build_gun_formula\":\"33:33:33:33\"",
-		host : regexp.MustCompile(".*\\.ppgame\\.com"),
-		url : regexp.MustCompile("(index\\.php(\\/.*\\/Index\\/index)*)|(cn_mica_new\\/.*)|(auth)|(xy\\/.*)|(Config\\/.*)|(normal_login)"),
+		host : regexp.MustCompile("(.*\\.ppgame\\.com)|(.*\\.sunborngame\\.com)"),
+		url : regexp.MustCompile("(index\\.php(\\/.*\\/Index\\/index)*)|(cn_mica_new\\/.*)|(auth)|(xy\\/.*)|(Config\\/.*)|(normal_login)|()"),
 		mutex : new(sync.RWMutex),
 	}
 	if err := ar.Run(); err != nil {
@@ -135,7 +135,11 @@ func (ar *AntiRivercrab) onResponse(resp *http.Response, ctx *goproxy.ProxyCtx) 
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		return resp
 	}
-	if strings.HasSuffix(ctx.Req.URL.Path,"/Index/getDigitalSkyNbUid"){
+	if body[0] != byte(35){
+		resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		return resp
+	}
+	if strings.HasSuffix(ctx.Req.URL.Path,"/Index/getDigitalSkyNbUid") || strings.HasSuffix(ctx.Req.URL.Path,"/Index/getUidEnMicaQueue"){
 		data, err := cipher.AuthCodeDecodeB64Default(string(body)[1:])
 		if err != nil {
 			//ar.log.Errorf("解析Uid数据失败 -> %+v", err)
@@ -186,8 +190,8 @@ func (ar *AntiRivercrab) onResponse(resp *http.Response, ctx *goproxy.ProxyCtx) 
 func (ar *AntiRivercrab) condition() goproxy.ReqConditionFunc {
 	return func(req *http.Request, ctx *goproxy.ProxyCtx) bool {
 		//ar.log.Infof("请求 -> %s", path(req))
-		if strings.HasSuffix(req.Host, "ppgame.com") {
-			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid"){
+		if strings.HasSuffix(req.Host, "ppgame.com") || strings.HasSuffix(req.Host, "sunborngame.com") {
+			if strings.HasSuffix(req.URL.Path, "/Index/index") || strings.HasSuffix(req.URL.Path, "/Index/getDigitalSkyNbUid") || strings.HasSuffix(req.URL.Path,"/Index/getUidEnMicaQueue"){
 				//ar.log.Infof("请求通过 -> %s", path(req))
 				return true
 			}
